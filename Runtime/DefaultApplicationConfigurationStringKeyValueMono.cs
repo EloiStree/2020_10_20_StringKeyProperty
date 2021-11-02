@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DefaultApplicationConfigurationStringKeyValueMono : MonoBehaviour
 {
@@ -17,11 +18,12 @@ public class DefaultApplicationConfigurationStringKeyValueMono : MonoBehaviour
 
     [Header("Debug")]
     public StringKeyPropertyGroup m_application = new StringKeyPropertyGroup("DefaultApplicationConfig");
+    public StringKeyPropertyGroupEvent m_onImportDetected;
+    public StringKeyPropertyGroupEvent m_onExportDetected;
 
     public void Awake()
     {
         if (autoImportAwake) {
-
             Import();
         }
         if (pushValueInStaticAccess)
@@ -52,6 +54,7 @@ public class DefaultApplicationConfigurationStringKeyValueMono : MonoBehaviour
         {
             File.WriteAllText(path,"");
         }
+        m_onImportDetected.Invoke(m_application);
     }
 
     [ContextMenu("OpenFolder")]
@@ -86,7 +89,22 @@ public class DefaultApplicationConfigurationStringKeyValueMono : MonoBehaviour
     {
         string path = GetPathToUse();
         StringKeyPropertyImport.Export(in path, in m_application);
+        m_onExportDetected.Invoke(m_application);
+    }
+
+    public void DebugLogExport(StringKeyPropertyGroup group)
+    {
+        Debug.Log("Export: " + group.m_name);
+    }
+    public void DebugLogImport(StringKeyPropertyGroup group)
+    {
+        Debug.Log("Import: " + group.m_name);
     }
 
     public StringKeyPropertyGroup GetConfigurationRef() { return m_application; }
+}
+[System.Serializable]
+public class StringKeyPropertyGroupEvent : UnityEvent<StringKeyPropertyGroup>
+{
+
 }
