@@ -33,6 +33,9 @@ public class DefaultApplicationConfigurationStringKeyValueMono : MonoBehaviour
     public  void Import()
     {
         string path = GetPathToUse();
+        string directoryName = Path.GetDirectoryName(path);
+        if (!Directory.Exists(directoryName))
+            Directory.CreateDirectory(directoryName);
         if (!File.Exists(path)) {
             //StringKeyPropertyImport.ImportFromText( m_defaultConfigIfFileDontExist.text, m_configNameId,out bool converted, out m_application);
             //StringKeyPropertyImport.Export(in path, in m_application);
