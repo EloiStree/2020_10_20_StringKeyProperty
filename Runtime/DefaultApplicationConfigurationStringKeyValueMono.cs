@@ -44,7 +44,6 @@ public class DefaultApplicationConfigurationStringKeyValueMono : MonoBehaviour
             File.WriteAllText(path, m_defaultConfigIfFileDontExist.text);
 
         }
-
         StringKeyPropertyImport.Import(in path, out bool found, out m_application);
         if (!found && m_defaultConfigIfFileDontExist != null)
         {

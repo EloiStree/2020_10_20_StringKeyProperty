@@ -152,31 +152,12 @@ public class StringKeyPropertyImport {
 
     }
 
- 
 
     public static void PushIn( in StringKeyPropertyGroup group, in string key, in string value)
     {
-
-
-        Eloi.E_CodeTag.NotTimeNow.Info("This should have some balise to oblige bool double, string, or ulong");
-        if (bool.TryParse(value, out bool resultBool))
-        {
-
-        }
-        if (double.TryParse(value, out double resultDouble))
-        {
-
-        }
-        if (ulong.TryParse(value, out ulong resultUlong))
-        {
-
-        }
-
-        {
             if (Eloi.E_StringUtility.IsFilled(in key)) {
                 group.AppendString(in key, in value);
             }
-        }
     }
 }
 
@@ -184,10 +165,7 @@ public class StringKeyPropertyImport {
 [System.Serializable]
 public class StringKeyPropertyGroup{
     public string m_name;
-    public List<StringKeyPropertyBoolean> m_booleanKeys = new List<StringKeyPropertyBoolean>();
-    public List<StringKeyPropertyDouble> m_doubleKeys = new List<StringKeyPropertyDouble>();
-    public List<StringKeyPropertyUlong> m_ulongKeys = new List<StringKeyPropertyUlong>();
-    public List<StringKeyPropertyString> m_stringKeys = new List<StringKeyPropertyString>();
+     public List<StringKeyPropertyString> m_stringKeys = new List<StringKeyPropertyString>();
 
     public void GetFromStringCollection(in string keyPropertyNameId, out bool found, out string value, string defaultValue = "")
     {
@@ -204,51 +182,8 @@ public class StringKeyPropertyGroup{
         found = false;
         value = defaultValue;
     }
-    public void GetFromBooleanCollection(in string keyPropertyNameId, out bool found, out bool value, bool defaultValue = false)
-    {
-
-        foreach (var item in m_booleanKeys)
-        {
-            if (Eloi.E_StringUtility.AreEquals(in item.m_key, in keyPropertyNameId, true, true))
-            {
-                found = true;
-                value = item.m_value;
-                return;
-            }
-        }
-        found = false;
-        value = defaultValue;
-    }
-    public void GetFromDoubleCollection(in string keyPropertyNameId, out bool found, out double value, double defaultValue=0)
-    {
-
-        foreach (var item in m_doubleKeys)
-        {
-            if (Eloi.E_StringUtility.AreEquals(in item.m_key, in keyPropertyNameId, true, true))
-            {
-                found = true;
-                value = item.m_value;
-                return;
-            }
-        }
-        found = false;
-        value = defaultValue;
-    }
-    public void GetFromUlongCollection(in string keyPropertyNameId, out bool found, out ulong value, ulong defaultValue = 0)
-    {
-
-        foreach (var item in m_ulongKeys)
-        {
-            if (Eloi.E_StringUtility.AreEquals(in item.m_key, in keyPropertyNameId, true, true))
-            {
-                found = true;
-                value = item.m_value;
-                return;
-            }
-        }
-        found = false;
-        value = defaultValue;
-    }
+   
+   
 
     public void AppendString(in string key, in string value)
     {
@@ -305,6 +240,32 @@ public class StringKeyPropertyGroup{
     {
         GetFromStringCollectionAsInt(in stringId, out bool valide, out int value);
         if (valide) target = value;
+    }
+
+    public void SetStringInCollectionAsTextIfFound(in string key, in string value)
+    {
+        for (int i = 0; i < m_stringKeys.Count; i++)
+        {
+            if (Eloi.E_StringUtility.AreEquals(
+                in m_stringKeys[i].m_key, in key, true, true)) {
+                m_stringKeys[i].m_value = value;
+                return;
+            }
+        }
+    }
+
+    public void SetOrAddStringInCollectionAsText(in string key, in string value)
+    {
+        for (int i = 0; i < m_stringKeys.Count; i++)
+        {
+            if (Eloi.E_StringUtility.AreEquals(
+                in m_stringKeys[i].m_key, in key, true, true))
+            {
+                m_stringKeys[i].m_value = value;
+                return;
+            }
+        }
+        m_stringKeys.Add(new StringKeyPropertyString(key, value));
     }
 
     public StringKeyPropertyGroup(string m_name)
