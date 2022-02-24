@@ -13,6 +13,7 @@ public class ApplicationConfStringKeyToParseValueMono : MonoBehaviour
     public void Reset() {
         Eloi.E_SearchInSceneUtility.TryToFetchWithInScene( ref m_source); 
     }
+
  
     public void AccessAndPushObserveValue()
     {
