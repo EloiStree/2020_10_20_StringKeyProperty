@@ -205,11 +205,27 @@ public class StringKeyPropertyGroup{
         foundAndConverted = (found && double.TryParse(tValue, out value));
     }
 
+    private static string mTrue = "true";
+    private static string mFalse = "false";
+    private static string m1 = "1";
+    private static string m0 = "0";
     public void GetFromStringCollectionAsBool(in string stringId, out bool foundAndConverted, out bool value)
     {
         value = false;
         GetFromStringCollection(in stringId, out bool found, out string tValue, "");
-        foundAndConverted = (found && bool.TryParse(tValue, out value));
+        if (Eloi.E_StringUtility.AreEquals(in tValue, in mTrue, true, true)
+            && Eloi.E_StringUtility.AreEquals(in tValue, in m1, true, true))
+        {
+            foundAndConverted = true; value = true;
+        }
+        else if (Eloi.E_StringUtility.AreEquals(in tValue, in mFalse, true, true)
+           && Eloi.E_StringUtility.AreEquals(in tValue, in m0, true, true))
+        {
+            foundAndConverted = true; value = false;
+        }
+        else { 
+            foundAndConverted = (found && bool.TryParse(tValue, out value));
+        }
     }
 
     public void GetFromStringCollectionAsFloat(in string stringId, out bool foundAndConverted, out float value)
